@@ -5,7 +5,12 @@
     "name": "imeepos",
     "email": "1037483576@qq.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "handlebars": "^4.0.11"
+  },
   "main": "index.js",
-  "typings": "index.d.ts"
+  "typings": "index.d.ts",
+  "devDependencies": {
+    "@types/handlebars": "^4.0.39"
+  }
 }
