@@ -4,7 +4,8 @@ import { compile } from 'handlebars';
 import { extname, dirname } from 'path';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { relative, normalize, join } from '@angular-devkit/core';
+import { relative, normalize, join, logging, terminal } from '@angular-devkit/core';
+const logger = new logging.IndentLogger('create');
 
 export function iwe7Template<T>(
     sourcePath: string,
@@ -13,6 +14,11 @@ export function iwe7Template<T>(
 ) {
     const templateRoot = normalize(sourcePath);
     const outputPath = normalize(destPath);
+    logger.subscribe(res => {
+        console.log(
+            `${terminal.red(`${res.name}`)} ${terminal.green(res.message)}`
+        )
+    });
     return listDir(sourcePath).pipe(
         map(res => normalize(res.replace(extname(res), ''))),
         map(res => relative(templateRoot, res)),
@@ -31,8 +37,8 @@ export function iwe7Template<T>(
                         mkdirSync(filePath);
                     }
                     writeFileSync(file, res.content);
-                }),
-                tap(res => console.log(`create:${res.filename}`))
+                    logger.info(`${res.filename}`);
+                })
             );
         })
     )
